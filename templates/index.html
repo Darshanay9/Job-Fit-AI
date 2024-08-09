@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Job Fit AI</title>
+</head>
+
+<body class="bg-gradient-to-br from-blue-400 via-navy-500 to-aqua-500">
+    <div class="relative overflow-hidden">
+        <!-- Updated background -->
+        <svg class="absolute inset-0 z-[-10] h-full w-full stroke-gray-200/10 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
+            aria-hidden="true">
+            <defs>
+                <pattern id="983e3e4c-de6d-4c3f-8d64-b9761d1534cc" width="200" height="200" x="50%" y="-1"
+                    patternUnits="userSpaceOnUse">
+                    <path d="M.5 200V.5H200" fill="none" />
+                </pattern>
+            </defs>
+            <svg x="50%" y="-1" class="overflow-visible fill-gray-100/20">
+                <path
+                    d="M-200 0h201v201h-201Z M600 0h201v201h-201Z M-400 600h201v201h-201Z M200 800h201v201h-201Z"
+                    stroke-width="0" />
+            </svg>
+            <rect width="100%" height="100%" stroke-width="0"
+                fill="url(#983e3e4c-de6d-4c3f-8d64-b9761d1534cc)" />
+        </svg>
+        <div class="mx-auto max-w-7xl px-6 pb-24 pt-6 sm:pb-32 lg:flex lg:px-8 lg:py-40">
+            <div class="mx-auto max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-xl lg:pt-8 text-center">
+                <h1 class="mt-4 text-4xl font-bold tracking-tight text-gray-800 sm:text-5xl">JobFitAI: The Future of
+                    Recruitment is Here.</h1>
+                <div class="mt-6 sm:mt-16 lg:mt-12">
+                    <p class="text-lg leading-8 text-black-600">Revolutionize your hiring process with our cutting-edge resume parsing technology. Streamline candidate evaluation and elevate the efficiency of your recruitment strategy.</p>
+                </div>
+                <div class="mt-10 flex items-center justify-center gap-x-6">
+                    <form action="/process" method="post" enctype="multipart/form-data">
+                        <div
+                            class="mt-10 flex flex-col justify-start items-start sm:flex-row sm:items-center  gap-x-6">
+                            <button type="submit"
+                                class=" my-2 bg-blue-500 px-8 rounded-2xl py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-400/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Process</button>
+                            <input type="file" name="pdf_doc" id="pdf_doc" accept=".pdf"
+                                class=" drop-shadow-md bg-white/10 font-semibold leading-6 text-gray-900 border border-blue-300 py-2 px-4 rounded-2xl block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-400 hover:file:bg-blue-100">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="mx-auto mt-8 sm:mt-12 lg:mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-24 lg:max-w-none lg:flex-none xl:ml-32">
+                <div class="max-w-3xl flex-none sm:max-w-5xl lg:max-w-none">
+                    <img src="https://www.loopcv.pro/assets/images/others/loopcv-animation.gif"
+                        alt="App screenshot" width="1000" height="700"
+                        class="w-full h-auto mt-[-4rem] rounded-md bg-white/5 shadow-2xl ring-1 ring-white/10">
+                </div>
+            </div>
+        </div>
+
+        <div class="w-screen h-full pb-8">
+            <div class="flex flex-col justify-center items-center text-gray-800">
+                <!-- Updated text color -->
+                <div>
+                    <div id="dictionaryValues"
+                        class="border border-1 border-black max-w-7xl p-8 text-lg"></div>
+                    {% if data %}
+                    <script>
+                        function displayDictionaryValues(data) {
+                            var dictionaryValuesDiv = document.getElementById("dictionaryValues");
+                            var html = generateHTML(data);
+                            dictionaryValuesDiv.innerHTML = html;
+                        }
+
+                        function generateHTML(data) {
+                            var html = "";
+                            var index = 1;
+                            for (var key in data) {
+                                if (data.hasOwnProperty(key)) {
+                                    if (isFinite(key)) {
+                                        html += "<p><strong>" + (parseInt(key) + 1) + ":</strong> ";
+                                    } else {
+                                        html += "<p><strong>" + key + ":</strong> ";
+                                    }
+                                    if (typeof data[key] === 'object') {
+                                        html += generateHTML(data[key]);
+                                    } else {
+                                        html += data[key];
+                                    }
+                                    html += "</p>";
+                                    index++;
+                                }
+                            }
+                            return html;
+                        }
+                        displayDictionaryValues({{ data | tojson }});
+                    </script>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('chatbot-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var input = document.getElementById('chatbot-input');
+            var message = input.value;
+            if (message.trim() !== '') {
+                appendMessage('You', message);
+                input.value = '';
+                // Simulate a bot response
+                setTimeout(function () {
+                    appendMessage('Bot', 'This is a simulated response.');
+                }, 1000);
+            }
+        });
+
+        function appendMessage(sender, message) {
+            var messageContainer = document.createElement('div');
+            messageContainer.classList.add('mb-2');
+            messageContainer.innerHTML = '<strong>' + sender + ':</strong> ' + message;
+            document.getElementById('chatbot-messages').appendChild(messageContainer);
+            document.getElementById('chatbot-messages').scrollTop = document.getElementById('chatbot-messages').scrollHeight;
+        }
+    </script>
+</body>
+
+</html>
